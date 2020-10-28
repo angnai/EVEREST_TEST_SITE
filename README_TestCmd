@@ -1,0 +1,181 @@
+
+-. TestCmd.ini 내 Cmd 의 파라메터 설정값 설명
+
+1. [n init] 관련 설명
+	> nand initialize 실행 명령
+
+	> 예제는 아래와 같음
+		1) n init all 600
+			모든 채널에 대해 nand frequency를 600Mhz 로 설정하여 initialize 수행함.
+		2) n init [start_ch] [end_ch] [Freq]
+			start_ch ~ end_ch 까지 nand frequency를 [Freq]Mhz 로 설정하여 initialize 수행함.
+			설정값은 아래와 같음
+				start_ch : 0 ~ 11
+				end_ch : start_ch ~ 11 
+				Freq : Max 600
+	
+	> nand initialize 의 pad parameter 및 nand set_feature 변경 법
+		nand initialize 시 soc pad parameter 및 nand feature 에 대한 설정값은 각각 sel_soc_index 와 sel_nand_index 에 따라 설정하게 되어있음.
+
+
+2. [n sel_soc_index] 관련 설명
+	> soc pad parameter 설정preset 를 Channel과 CE에 대해 설정함
+
+	> 예제는 아래와 같음
+		1) n sel_soc_index all [index]
+			모든 Channel과 모든 CE에 대해 설정preset 을 index 로 설정함.
+		2) n sel_soc_index all_ch [ce0_index] .. [ceN_index]
+			모든 Channel에 대해 각각의 CE별로 설정preset 을 ceX_index 로 설정함.
+		3) n sel_soc_index ch [ch] [ce0_index] .. [ceN_index]
+			Channel 1개에 대해 각각의 CE별로 설정preset 을 ceX_index 로 설정함.
+		4) n sel_soc_index ce [ce] [index]
+			모든 Channel에 대해 CE 1개 설정preset 을 index 로 설정함.
+		5) n sel_soc_index [ch] [ce] [index]
+			선택한 Channel 의 CE에 대해 설정preset 을 index 로 설정함.
+
+	 여기서 ceX_index 혹은 index 란 미리 설정되어있는 pad parameter 의 Set이며,
+	 Set 1개는 set_soc_ds 와 set_soc_odt 값이 설정되어있음.
+	 총 5개의 Set를 가지기 때문에 index값은 0~4의 값을 설정 할 수 있으나, index 0 의 경우 default값을 가지도록 할 것이기 때문에 1~4까지 설정 할 수 있음.
+
+	> nand init 시 해당 설정preset index로 초기화 하게 되어있으며, 모든 Channel과 CE의 index default 값은 0 이다. (0번 설정preset 을 가르키도록 되어있음.)
+	
+
+3. [n set_soc_ds] 관련 설명
+	> soc pad parameter 중 dqs, dq, re, ctrl PAD 의 Driver strength 를 설정함.
+
+	> 예제는 아래와 같음
+		1) n set_soc_ds [index] [dqs] [dq] [re] [ctrl]
+			index 번 설정preset 내 dqs, dq, re, ctrl 의 PAD Driver strength 값을 설정한다.
+			설정값은 아래와 같이 설정 가능함.
+				
+				index : 1 ~ 4 (0도 입력 가능 하지만, 0은 default value 기 때문에 가급적 변경하지 않음.)
+				dqs, dq, re, ctrl 값은 아래와 같이 0~4값으로 설정 가능함.
+					0 : 기존값 그대로 설정하며 변경하지 않음. 
+					1 : DS 값을 50ohm 으로 설정
+					2 : DS 값을 35ohm 으로 설정
+					3 : DS 값을 25ohm 으로 설정
+					4 : DS 값을 18ohm 으로 설정
+	
+
+4. [n set_soc_odt] 관련 설명
+	> soc pad parameter 중 dqs, dq PAD 의 ODT 값을 설정함.
+
+	> 예제는 아래와 같음
+		1) n set_soc_odt [index] [dqs] [dq]
+			index 번 설정preset 내 dqs, dq 의 PAD ODT 값을 설정한다.
+			설정값은 아래와 같이 설정 가능함.
+				index : 1 ~ 4 (0도 입력 가능 하지만, 0은 default value 기 때문에 가급적 변경하지 않음.)
+				dqs, dq, re, ctrl 값은 아래와 같이 0~6값으로 설정 가능함.
+					0 : 기존값 그대로 설정하며 변경하지 않음. 
+					1 : ODT 값을 NONE 으로 설정
+					2 : ODT 값을 150ohm 으로 설정
+					3 : ODT 값을 100ohm 으로 설정
+					4 : ODT 값을 75ohm 으로 설정
+					5 : ODT 값을 50ohm 으로 설정
+					6 : ODT 값을 30ohm 으로 설정
+	
+
+5. [n sel_nand_index] 관련 설명
+	> nand set feature 설정preset 를 Channel과 CE에 대해 설정함
+
+	> 예제는 아래와 같음
+		1) n sel_nand_index all [index]
+			모든 Channel과 모든 CE에 대해 설정preset 을 index 로 설정함.
+		2) n sel_nand_index all_ch [ce0_index] .. [ceN_index]
+			모든 Channel에 대해 각각의 CE별로 설정preset 을 ceX_index 로 설정함.
+		3) n sel_nand_index ch [ch] [ce0_index] .. [ceN_index]
+			Channel 1개에 대해 각각의 CE별로 설정preset 을 ceX_index 로 설정함.
+		4) n sel_nand_index ce [ce] [index]
+			모든 Channel에 대해 CE 1개 설정preset 을 index 로 설정함.
+		5) n sel_nand_index [ch] [ce] [index]
+			선택한 Channel 의 CE에 대해 설정preset 을 index 로 설정함.
+
+	 여기서 ceX_index 혹은 index 란 미리 설정되어있는 pad parameter 의 Set이며,
+	 Set 1개는 set_nand_ds 와 set_nand_odt 값이 설정되어있음.
+	 총 5개의 Set를 가지기 때문에 index값은 0~4의 값을 설정 할 수 있으나, index 0 의 경우 default값을 가지도록 할 것이기 때문에 1~4까지 설정 할 수 있음.
+
+	> nand init 시 해당 설정preset index로 초기화 하게 되어있으며, 모든 Channel과 CE의 index default 값은 0 이다. (0번 설정preset 을 가르키도록 되어있음.)
+	
+
+6. [n set_nand_ds] 관련 설명
+	> nand set_feature 중 Driver strength 를 설정함.
+
+	> 예제는 아래와 같음
+		1) n set_nand_ds [index] [ds]
+			index 번 설정preset 의 nand Driver strength 값을 설정한다.
+			설정값은 아래와 같이 설정 가능함.
+				index : 1 ~ 4 (0도 입력 가능 하지만, 0은 default value 기 때문에 가급적 변경하지 않음.)
+				ds 값은 아래와 같이 0~3값으로 설정 가능함.
+					0 : 기존값 그대로 설정하며 변경하지 않음. 
+					1 : DS 값을 UNDER_DRIVE 으로 설정
+					2 : DS 값을 NORMAL_DRIVE 으로 설정
+					3 : DS 값을 OVER_DRIVE 으로 설정
+	
+
+7. [n set_nand_odt] 관련 설명
+	> nand set_feature 중 ODT 값을 설정함.
+
+	> 예제는 아래와 같음
+		1) n set_nand_odt [index] [comm_odt] [program_odt] [read_odt]
+			index 번 설정preset 내 comm, program, read 의 nand ODT 값을 설정한다.
+				nand 별로 ODT 설정은 2가지 case로 나뉨.
+				1번 case : 공통 ODT 설정, Program 과 read 에 대해 ODT를 1개만 설정하여 사용함. (comm_odt 값으로 설정됨)
+				2번 case : Program/Read 별도 ODT 설정, Program 과 Read 에 대해 ODT를 별도로 사용함. (program은 program_odt, Read는 read_odt 값으로 설정됨)
+			설정값은 아래와 같이 설정 가능함.				
+				index : 1 ~ 4 (0도 입력 가능 하지만, 0은 default value 기 때문에 가급적 변경하지 않음.)
+				comm, program, read 값은 아래와 같이 0~5값으로 설정 가능함.
+					0 : 기존값 그대로 설정하며 변경하지 않음. 
+					1 : ODT 값을 NONE 으로 설정
+					2 : ODT 값을 150ohm 으로 설정
+					3 : ODT 값을 100ohm 으로 설정
+					4 : ODT 값을 75ohm 으로 설정
+					5 : ODT 값을 50ohm 으로 설정
+
+
+8. [n si] 관련 설명
+	> SI 측정을 수행함.
+
+	> 예제는 아래와 같음
+		1) n si all [freq]
+			모든 Channel에 대해 [freq]Mhz 로 SI 를 측정함.
+		2) n [start_ch] [end_ch] [start_lun] [end_lun] [freq]
+			start_ch 부터 end_ch 까지 start_lun ~ end_lun 에 대해 [freq]Mhz 로 SI 를 측정함.
+		설정값은 아래와 같이 설정 가능함.
+			start_ch : 0 ~ 11
+			end_ch : start_ch ~ 11
+			start_lun : 0 ~ max_lun (CE가 아닌 lun 단위임)
+			end_lun : start_lun ~ max_lun (CE가 아닌 lun 단위임)
+			freq : 0 ~ 600
+
+	> SI 측정 의 parameter 변경 법
+		n si_para 를 통해 SI 측정에 관련된 측정 횟수, Pattern 정보를 변경 할 수 있음.
+
+
+9. [n si_para] 관련 설명
+	> SI 측정에 관련된 parameter 설정
+
+	> 예제는 아래와 같음
+		1) n si_para [test_cnt] [pattern_randomize] [pattern_data] [pattern_comm_diff]
+			SI 측정에 대해 반복횟수, Test pattern 를 설정한다.
+			설정값은 아래와 같이 설정 가능함.
+				test_cnt : 1 ~ 65535 (기본적으로 2500 번 반복함)
+				pattern_randomize : 0 = disable , 1 = enable
+				pattern_data : 0 ~ 4294967295 으로 숫자값을 입력해야함. (0xFF00FF00 -> 4278255360)
+				pattern_comm_diff : 0 ~ 65535 으로 증가폭임. (보통 0 or 3으로 설정)
+
+
+
+
+10. [n get_window] 관련 설명
+	> SI 측정 후 Window 값을 획득.
+
+	> 예제는 아래와 같음
+		1) n get_window all
+			모든 Channel 과 모든 Lun 에 대해 Window값을 UART로 전송한다.
+		2) n get_window [start_ch] [end_ch] [start_lun] [end_lun]
+			선택한 Channel 과 선택한 Lun 에 대해 Window값을 UART로 전송한다.
+			설정값은 아래와 같음.
+				start_ch : 0 ~ 11
+				end_ch : start_ch ~ 11
+				start_lun : 0 ~ max_lun (CE가 아닌 lun 단위임)
+				end_lun : start_lun ~ max_lun (CE가 아닌 lun 단위임)
